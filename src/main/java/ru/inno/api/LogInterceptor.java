@@ -1,4 +1,4 @@
-package ru.inno;
+package ru.inno.api;
 
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -51,6 +51,7 @@ public class LogInterceptor implements Interceptor {
             }
         }
 
+        // TODO: log body properly
         long length = Long.parseLong(Objects.requireNonNull(response.header("Content-Length")));
         if (length > 0) {
             System.out.println("BODY:");

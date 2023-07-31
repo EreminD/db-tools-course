@@ -15,12 +15,10 @@ import java.util.List;
 
 public class CompanyServiceImpl implements CompanyService {
     public static final MediaType APPLICATION_JSON = MediaType.parse("application/json; charset=UTF-8");
-
     private static final String PATH = "company";
     private final String BASE_PATH;
     private final OkHttpClient client;
     private final ObjectMapper mapper;
-    private String token;
 
     public CompanyServiceImpl(OkHttpClient client, String url) {
         this.client = client;
@@ -54,25 +52,35 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CreateCompanyResponse create(String name) throws IOException {
-        return create(name, null);
+        return null;
     }
 
     @Override
     public CreateCompanyResponse create(String name, String description) throws IOException {
         HttpUrl url = getUrl().build();
-        CreateCompanyRequest body = new CreateCompanyRequest(name, description);
-        RequestBody jsonBody = RequestBody.create(mapper.writeValueAsString(body), APPLICATION_JSON);
-        Request.Builder request = new Request.Builder().post(jsonBody).url(url);
-        if (token != null) {
-            request.addHeader("x-client-token", token);
-        }
-        Response response = this.client.newCall(request.build()).execute();
-        return mapper.readValue(response.body().string(), CreateCompanyResponse.class);
+        CreateCompanyRequest body1 = new CreateCompanyRequest(name, description);
+        RequestBody jsonBody1 = RequestBody.create(mapper.writeValueAsString(body1), APPLICATION_JSON);
+        Request.Builder request1 = new Request.Builder().post(jsonBody1).url(url);
+
+        // TODO: make it optional
+        String token = getToken("roxy", "ert");
+        request1.addHeader("x-client-token", token);
+
+
+        Response response1 = this.client.newCall(request1.build()).execute();
+        return mapper.readValue(response1.body().string(), CreateCompanyResponse.class);
+    }
+
+    private String getToken(String user, String pass) throws IOException {
+        String body = "{\"username\": \"" + user + "\", \"password\": \"" + pass + "\"}";
+        RequestBody jsonBody = RequestBody.create(body, APPLICATION_JSON);
+        Request request = new Request.Builder().post(jsonBody).url(BASE_PATH + "/auth/login").build();
+        Response response = this.client.newCall(request).execute();
+        return mapper.readValue(response.body().string(), UserInfo.class).getUserToken();
     }
 
     @Override
     public void deleteById(int id) {
-
     }
 
     @Override
@@ -102,14 +110,4 @@ public class CompanyServiceImpl implements CompanyService {
         });
     }
 
-    @Override
-    public CompanyService auth(String username, String password) throws IOException {
-        String body = "{\"username\": \"" + username + "\", \"password\": \"" + password + "\"}";
-        RequestBody jsonBody = RequestBody.create(body, APPLICATION_JSON);
-        Request request = new Request.Builder().post(jsonBody).url(BASE_PATH + "/auth/login").build();
-        Response response = this.client.newCall(request).execute();
-        this.token = mapper.readValue(response.body().string(), UserInfo.class).getUserToken();
-
-        return this;
-    }
 }

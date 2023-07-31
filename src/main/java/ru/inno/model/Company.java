@@ -13,7 +13,6 @@ public class Company {
     @JsonProperty("isActive")
     private boolean isActive;
 
-
     public Company() {
     }
 
