@@ -83,8 +83,8 @@ public class Main {
             boolean isActive = resultSet.getBoolean("isActive");
             int id = resultSet.getInt("id");
 
-            Company c = new Company(id, name, isActive);
-            names.add(c);
+//            Company c = new Company(id, name, "", isActive);
+//            names.add(c);
         }
 
         System.out.println(names);
