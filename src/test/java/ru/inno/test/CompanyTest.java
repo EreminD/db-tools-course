@@ -42,12 +42,13 @@ public class CompanyTest {
     @DisplayName("Этот проверяет, что можно запросить компанию по id")
     public void companyGetByIdTest(CompanyService service, CompanyRepository repository) throws IOException, SQLException {
         Faker faker = new Faker(new Locale("ru"));
-        CompanyEntity dbEntity = repository.create(faker.company().name());
-        Company apiEntity = service.getById(dbEntity.getId());
-        assertEquals(dbEntity.getId(), apiEntity.getId());
-        assertEquals(dbEntity.getName(), apiEntity.getName());
+        String name = faker.company().name();
+        int entityId = repository.create(name);
+        Company apiEntity = service.getById(entityId);
+        assertEquals(entityId, apiEntity.getId());
+        assertEquals(name, apiEntity.getName());
         assertTrue(apiEntity.isActive());
-        assertEquals(dbEntity.getDescription(), apiEntity.getDescription());
+        assertNull(null, apiEntity.getDescription());
     }
 
     @Test

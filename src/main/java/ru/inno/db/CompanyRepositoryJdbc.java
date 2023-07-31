@@ -2,10 +2,7 @@ package ru.inno.db;
 
 import ru.inno.model.CompanyEntity;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,17 +63,24 @@ public class CompanyRepositoryJdbc implements CompanyRepository {
     }
 
     @Override
-    public CompanyEntity create(String name) throws SQLException {
-        // TODO: get inserted ID;
-        PreparedStatement preparedStatement = connection.prepareStatement(INSERT);
+    public int create(String name) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, name);
         preparedStatement.executeUpdate();
-        return getLast();
+        ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+        generatedKeys.next();
+        return generatedKeys.getInt(1);
     }
 
     @Override
-    public CompanyEntity create(String name, String description) {
-        return null;
+    public int create(String name, String description) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_WITH_DESC, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, name);
+        preparedStatement.setString(2, description);
+        preparedStatement.executeUpdate();
+        ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+        generatedKeys.next();
+        return generatedKeys.getInt(1);
     }
 
     @Override
