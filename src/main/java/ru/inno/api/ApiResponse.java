@@ -1,6 +1,7 @@
 package ru.inno.api;
 
 import okhttp3.Headers;
+import ru.inno.model.ApiError;
 
 import java.util.Objects;
 
@@ -9,10 +10,12 @@ public class ApiResponse<T> {
     private final int statusCode;
     private final T body;
 
-    public ApiResponse(Headers headers, int statusCode, T body) {
+    private final ApiError apiError;
+    public ApiResponse(Headers headers, int statusCode, T body, ApiError apiError) {
         this.headers = headers;
         this.statusCode = statusCode;
         this.body = body;
+        this.apiError = apiError;
     }
 
     public Headers getHeaders() {
@@ -25,6 +28,10 @@ public class ApiResponse<T> {
 
     public T getBody() {
         return body;
+    }
+
+    public ApiError getApiError() {
+        return apiError;
     }
 
     @Override

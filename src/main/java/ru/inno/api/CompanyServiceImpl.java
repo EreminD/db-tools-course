@@ -5,10 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
-import ru.inno.model.Company;
-import ru.inno.model.CreateCompanyRequest;
-import ru.inno.model.CreateCompanyResponse;
-import ru.inno.model.UserInfo;
+import ru.inno.model.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -71,10 +68,11 @@ public class CompanyServiceImpl implements CompanyService {
 
         Response response1 = this.client.newCall(request1.build()).execute();
         if(response1.code()>=400){
-            return new ApiResponse<>(response1.headers(), response1.code(), null);
+            ApiError body = mapper.readValue(response1.body().string(), ApiError.class);
+            return new ApiResponse<>(response1.headers(), response1.code(), null, body);
         } else {
             CreateCompanyResponse body = mapper.readValue(response1.body().string(), CreateCompanyResponse.class);
-            return new ApiResponse<>(response1.headers(), response1.code(), body);
+            return new ApiResponse<>(response1.headers(), response1.code(), body, null);
         }
     }
 
@@ -111,8 +109,7 @@ public class CompanyServiceImpl implements CompanyService {
         });
     }
 
-    public CompanyService setToken(String token) {
+    public void setToken(String token) {
         this.token = token;
-        return this;
     }
 }

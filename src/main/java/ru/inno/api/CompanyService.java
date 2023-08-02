@@ -2,11 +2,14 @@ package ru.inno.api;
 
 import ru.inno.model.Company;
 import ru.inno.model.CreateCompanyResponse;
+import ru.inno.model.UserInfo;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
-public interface CompanyService extends Authorizable<CompanyService> {
+public interface CompanyService extends Authorizable {
 
     List<Company> getAll() throws IOException;
 

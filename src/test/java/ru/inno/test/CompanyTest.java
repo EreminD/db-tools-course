@@ -7,11 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.junit.jupiter.api.extension.ExtendWith;
 import ru.inno.api.ApiResponse;
+import ru.inno.api.AuthorizeService;
 import ru.inno.api.CompanyService;
 import ru.inno.db.CompanyRepository;
 import ru.inno.ext.Authorized;
 import ru.inno.ext.CompanyRepositoryResolver;
 import ru.inno.ext.CompanyServiceResolver;
+import ru.inno.model.ApiError;
 import ru.inno.model.Company;
 import ru.inno.model.CompanyEntity;
 import ru.inno.model.CreateCompanyResponse;
@@ -59,7 +61,9 @@ public class CompanyTest {
     @DisplayName("Этот проверяет, что можно создавать компании")
     public void shouldCreateCompany(
             @Authorized(username = "roxy", password = "animal-fairy") CompanyService service,
-            CompanyRepository repository
+            CompanyService serviceNoAuth,
+            CompanyRepository repository,
+            AuthorizeService authorizeService
     ) throws IOException, SQLException {
         Faker faker = new Faker(new Locale("ru"));
         String nameToBe = faker.company().name();
@@ -84,12 +88,14 @@ public class CompanyTest {
         Faker faker = new Faker(new Locale("ru"));
         String nameToBe = faker.company().name();
         String descriptionToBe = faker.address().fullAddress();
+
         ApiResponse<CreateCompanyResponse> response = service.create(nameToBe, descriptionToBe);
 
         List<CompanyEntity> after = repository.getAll();
-
         assertEquals(before.size(), after.size());
         assertEquals(response.getStatusCode(), 401);
+        assertEquals("Unauthorized", response.getApiError().getMessage());
+
     }
 
     @Test
