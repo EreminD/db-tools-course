@@ -4,16 +4,16 @@ import com.github.javafaker.Faker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import ru.inno.api.ApiResponse;
-import ru.inno.api.AuthorizeService;
 import ru.inno.api.CompanyService;
 import ru.inno.db.CompanyRepository;
 import ru.inno.ext.Authorized;
-import ru.inno.ext.CompanyRepositoryResolver;
+import ru.inno.ext.CompanyRepositoryJdbcResolver;
+import ru.inno.ext.CompanyRepositoryJpaResolver;
 import ru.inno.ext.CompanyServiceResolver;
-import ru.inno.model.Company;
-import ru.inno.model.CompanyEntity;
-import ru.inno.model.CreateCompanyResponse;
+import ru.inno.model.api.ApiResponse;
+import ru.inno.model.api.Company;
+import ru.inno.model.api.CreateCompanyResponse;
+import ru.inno.model.db.CompanyEntity;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -22,7 +22,8 @@ import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith({CompanyServiceResolver.class, CompanyRepositoryResolver.class})
+//@ExtendWith({CompanyServiceResolver.class, CompanyRepositoryJdbcResolver.class})
+@ExtendWith({CompanyServiceResolver.class, CompanyRepositoryJpaResolver.class})
 public class CompanyTest {
 
     @Test
@@ -58,9 +59,7 @@ public class CompanyTest {
     @DisplayName("Этот проверяет, что можно создавать компании")
     public void shouldCreateCompany(
             @Authorized(username = "roxy", password = "animal-fairy") CompanyService service,
-            CompanyService serviceNoAuth,
-            CompanyRepository repository,
-            AuthorizeService authorizeService
+            CompanyRepository repository
     ) throws IOException, SQLException {
         Faker faker = new Faker(new Locale("ru"));
         String nameToBe = faker.company().name();
@@ -91,6 +90,22 @@ public class CompanyTest {
         List<CompanyEntity> after = repository.getAll();
         assertEquals(before.size(), after.size());
         assertEquals(response.getStatusCode(), 401);
-        assertEquals("Unauthorized", response.getApiError().getMessage());
+        assertEquals("Unauthorized", response.getError().getMessage());
     }
+
+
+    @Test
+    public void findAll(CompanyRepository repository) throws SQLException {
+        List<CompanyEntity> entity = repository.getAll();
+        System.out.println(entity.size());
+    }
+
+    @Test
+    public void createNew(CompanyRepository repository) throws SQLException {
+        Faker faker = new Faker(new Locale("ru"));
+        String nameToBe = faker.company().name();
+        String descriptionToBe = faker.address().fullAddress();
+        repository.create(nameToBe, descriptionToBe);
+    }
+
 }

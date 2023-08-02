@@ -1,4 +1,4 @@
-package ru.inno.model;
+package ru.inno.model.api;
 
 import java.util.Objects;
 

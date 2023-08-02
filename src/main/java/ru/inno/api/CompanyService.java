@@ -1,13 +1,11 @@
 package ru.inno.api;
 
-import ru.inno.model.Company;
-import ru.inno.model.CreateCompanyResponse;
-import ru.inno.model.UserInfo;
+import ru.inno.model.api.ApiResponse;
+import ru.inno.model.api.Company;
+import ru.inno.model.api.CreateCompanyResponse;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 public interface CompanyService extends Authorizable {
 

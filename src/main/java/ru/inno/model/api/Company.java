@@ -1,4 +1,4 @@
-package ru.inno.model;
+package ru.inno.model.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

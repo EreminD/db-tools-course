@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
-import ru.inno.model.*;
+import ru.inno.model.api.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -61,22 +61,20 @@ public class CompanyServiceImpl implements CompanyService {
         RequestBody jsonBody1 = RequestBody.create(mapper.writeValueAsString(body1), APPLICATION_JSON);
         Request.Builder request1 = new Request.Builder().post(jsonBody1).url(url);
 
-        // TODO: make it optional
-        if (token != null){
+        if (token != null) {
             request1.addHeader("x-client-token", token);
         }
 
         Response response1 = this.client.newCall(request1.build()).execute();
-        if(response1.code()>=400){
+        if (response1.code() >= 400) {
+
             ApiError body = mapper.readValue(response1.body().string(), ApiError.class);
-            return new ApiResponse<>(response1.headers(), response1.code(), null, body);
+            return new ApiResponse<>(response1.headers().toMultimap(), response1.code(), null, body);
         } else {
             CreateCompanyResponse body = mapper.readValue(response1.body().string(), CreateCompanyResponse.class);
-            return new ApiResponse<>(response1.headers(), response1.code(), body, null);
+            return new ApiResponse<>(response1.headers().toMultimap(), response1.code(), body, null);
         }
     }
-
-
 
     @Override
     public void deleteById(int id) {

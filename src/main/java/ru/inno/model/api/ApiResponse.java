@@ -1,24 +1,23 @@
-package ru.inno.api;
+package ru.inno.model.api;
 
-import okhttp3.Headers;
-import ru.inno.model.ApiError;
-
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class ApiResponse<T> {
-    private final Headers headers;
+    private final Map<String, List<String>> headers;
     private final int statusCode;
     private final T body;
+    private final ApiError error;
 
-    private final ApiError apiError;
-    public ApiResponse(Headers headers, int statusCode, T body, ApiError apiError) {
+    public ApiResponse(Map<String, List<String>> headers, int statusCode, T body, ApiError error) {
         this.headers = headers;
         this.statusCode = statusCode;
         this.body = body;
-        this.apiError = apiError;
+        this.error = error;
     }
 
-    public Headers getHeaders() {
+    public Map<String, List<String>> getHeaders() {
         return headers;
     }
 
@@ -30,20 +29,20 @@ public class ApiResponse<T> {
         return body;
     }
 
-    public ApiError getApiError() {
-        return apiError;
+    public ApiError getError() {
+        return error;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ApiResponse<?> that)) return false;
-        return getStatusCode() == that.getStatusCode() && Objects.equals(getHeaders(), that.getHeaders()) && Objects.equals(getBody(), that.getBody());
+        return getStatusCode() == that.getStatusCode() && Objects.equals(getHeaders(), that.getHeaders()) && Objects.equals(getBody(), that.getBody()) && Objects.equals(getError(), that.getError());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getHeaders(), getStatusCode(), getBody());
+        return Objects.hash(getHeaders(), getStatusCode(), getBody(), getError());
     }
 
     @Override
@@ -52,6 +51,7 @@ public class ApiResponse<T> {
                 "headers=" + headers +
                 ", statusCode=" + statusCode +
                 ", body=" + body +
+                ", error=" + error +
                 '}';
     }
 }

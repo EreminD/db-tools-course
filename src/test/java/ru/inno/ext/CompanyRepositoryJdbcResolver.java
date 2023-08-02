@@ -7,7 +7,7 @@ import ru.inno.db.CompanyRepositoryJdbc;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class CompanyRepositoryResolver implements ParameterResolver, BeforeAllCallback, AfterAllCallback {
+public class CompanyRepositoryJdbcResolver implements ParameterResolver, BeforeAllCallback, AfterAllCallback {
     private Connection connection = null;
 
     @Override

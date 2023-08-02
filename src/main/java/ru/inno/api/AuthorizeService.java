@@ -1,6 +1,6 @@
 package ru.inno.api;
 
-import ru.inno.model.UserInfo;
+import ru.inno.model.api.UserInfo;
 
 import java.io.IOException;
 

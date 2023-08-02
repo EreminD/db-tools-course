@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 import ru.inno.api.*;
-import ru.inno.model.UserInfo;
+import ru.inno.model.api.UserInfo;
 
 import java.io.IOException;
 
@@ -40,7 +40,6 @@ public class CompanyServiceResolver implements ParameterResolver {
             }
             service.setToken(userInfo.getUserToken());
         }
-
         return service;
     }
 }

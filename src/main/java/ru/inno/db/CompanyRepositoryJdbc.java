@@ -1,6 +1,6 @@
 package ru.inno.db;
 
-import ru.inno.model.CompanyEntity;
+import ru.inno.model.db.CompanyEntity;
 
 import java.sql.*;
 import java.util.ArrayList;
