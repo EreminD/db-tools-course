@@ -20,6 +20,8 @@ public class CompanyServiceImpl implements CompanyService {
     private final OkHttpClient client;
     private final ObjectMapper mapper;
 
+    private String token;
+
     public CompanyServiceImpl(OkHttpClient client, String url) {
         this.client = client;
         this.BASE_PATH = url;
@@ -51,33 +53,32 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CreateCompanyResponse create(String name) throws IOException {
+    public ApiResponse<CreateCompanyResponse> create(String name) throws IOException {
         return null;
     }
 
     @Override
-    public CreateCompanyResponse create(String name, String description) throws IOException {
+    public ApiResponse<CreateCompanyResponse> create(String name, String description) throws IOException {
         HttpUrl url = getUrl().build();
         CreateCompanyRequest body1 = new CreateCompanyRequest(name, description);
         RequestBody jsonBody1 = RequestBody.create(mapper.writeValueAsString(body1), APPLICATION_JSON);
         Request.Builder request1 = new Request.Builder().post(jsonBody1).url(url);
 
         // TODO: make it optional
-        String token = getToken("roxy", "ert");
-        request1.addHeader("x-client-token", token);
-
+        if (token != null){
+            request1.addHeader("x-client-token", token);
+        }
 
         Response response1 = this.client.newCall(request1.build()).execute();
-        return mapper.readValue(response1.body().string(), CreateCompanyResponse.class);
+        if(response1.code()>=400){
+            return new ApiResponse<>(response1.headers(), response1.code(), null);
+        } else {
+            CreateCompanyResponse body = mapper.readValue(response1.body().string(), CreateCompanyResponse.class);
+            return new ApiResponse<>(response1.headers(), response1.code(), body);
+        }
     }
 
-    private String getToken(String user, String pass) throws IOException {
-        String body = "{\"username\": \"" + user + "\", \"password\": \"" + pass + "\"}";
-        RequestBody jsonBody = RequestBody.create(body, APPLICATION_JSON);
-        Request request = new Request.Builder().post(jsonBody).url(BASE_PATH + "/auth/login").build();
-        Response response = this.client.newCall(request).execute();
-        return mapper.readValue(response.body().string(), UserInfo.class).getUserToken();
-    }
+
 
     @Override
     public void deleteById(int id) {
@@ -110,4 +111,8 @@ public class CompanyServiceImpl implements CompanyService {
         });
     }
 
+    public CompanyService setToken(String token) {
+        this.token = token;
+        return this;
+    }
 }

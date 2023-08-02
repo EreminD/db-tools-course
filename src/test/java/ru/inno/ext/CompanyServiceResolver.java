@@ -1,17 +1,20 @@
 package ru.inno.ext;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
-import ru.inno.api.CompanyService;
-import ru.inno.api.CompanyServiceImpl;
-import ru.inno.api.LogInterceptor;
+import ru.inno.api.*;
+import ru.inno.model.UserInfo;
+
+import java.io.IOException;
 
 public class CompanyServiceResolver implements ParameterResolver {
     private final static String KEY = "CompanyService";
+    private final static String DEFAULT_USER = "roxy";
+    private final static String DEFAULT_PASS = "animal-fairy";
+
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
@@ -20,13 +23,25 @@ public class CompanyServiceResolver implements ParameterResolver {
 
     @Override
     public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        CompanyService service = (CompanyService) extensionContext.getRoot().getStore(ExtensionContext.Namespace.GLOBAL).get(KEY);
-        if (service == null) {
-            Interceptor interceptor = new LogInterceptor();
-            OkHttpClient client = new OkHttpClient.Builder().addNetworkInterceptor(interceptor).build();
-            service = new CompanyServiceImpl(client, "https://x-clients-be.onrender.com");
-            extensionContext.getRoot().getStore(ExtensionContext.Namespace.GLOBAL).put(KEY, service);
+        OkHttpClient client = new OkHttpClient.Builder().addNetworkInterceptor(new LogInterceptor()).build();
+        CompanyService service = new CompanyServiceImpl(client, "https://x-clients-be.onrender.com");
+
+        if (parameterContext.isAnnotated(Authorized.class)) {
+            Authorized auth = parameterContext.getParameter().getAnnotation(Authorized.class);
+            AuthorizeService authorizeService = new AuthorizeServiceImpl(client, "https://x-clients-be.onrender.com");
+            UserInfo userInfo;
+            try {
+                if (!auth.username().isBlank()) {
+                    userInfo = authorizeService.auth(auth.username(), auth.password());
+                } else {
+                    userInfo = authorizeService.auth(DEFAULT_USER, DEFAULT_PASS);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            service.setToken(userInfo.getUserToken());
         }
+
         return service;
     }
 }

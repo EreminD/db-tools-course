@@ -6,7 +6,7 @@ import ru.inno.model.CreateCompanyResponse;
 import java.io.IOException;
 import java.util.List;
 
-public interface CompanyService {
+public interface CompanyService extends Authorizable<CompanyService> {
 
     List<Company> getAll() throws IOException;
 
@@ -14,9 +14,9 @@ public interface CompanyService {
 
     Company getById(int id) throws IOException;
 
-    CreateCompanyResponse create(String name) throws IOException;
+    ApiResponse<CreateCompanyResponse> create(String name) throws IOException;
 
-    CreateCompanyResponse create(String name, String description) throws IOException;
+    ApiResponse<CreateCompanyResponse> create(String name, String description) throws IOException;
 
     void deleteById(int id);
 
