@@ -8,9 +8,9 @@ import org.junit.jupiter.api.extension.ParameterResolver;
 import ru.inno.db.EmployeeRepository;
 import ru.inno.db.EmployeeRepositoryJpa;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.spi.PersistenceUnitInfo;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.spi.PersistenceUnitInfo;
 import java.util.Properties;
 
 public class EmployeeRepositoryJpaResolver implements ParameterResolver {

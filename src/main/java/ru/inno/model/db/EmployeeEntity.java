@@ -1,6 +1,6 @@
 package ru.inno.model.db;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 

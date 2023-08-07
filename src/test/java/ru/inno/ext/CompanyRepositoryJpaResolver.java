@@ -1,5 +1,8 @@
 package ru.inno.ext;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.spi.PersistenceUnitInfo;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
@@ -8,9 +11,6 @@ import org.junit.jupiter.api.extension.ParameterResolver;
 import ru.inno.db.CompanyRepository;
 import ru.inno.db.CompanyRepositoryJpa;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.spi.PersistenceUnitInfo;
 import java.util.Properties;
 
 public class CompanyRepositoryJpaResolver implements ParameterResolver {

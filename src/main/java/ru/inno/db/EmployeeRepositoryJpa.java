@@ -2,7 +2,7 @@ package ru.inno.db;
 
 import ru.inno.model.db.EmployeeEntity;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 
 public class EmployeeRepositoryJpa implements EmployeeRepository {

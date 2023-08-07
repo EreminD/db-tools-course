@@ -1,14 +1,14 @@
 package ru.inno.ext;
 
+import jakarta.persistence.SharedCacheMode;
+import jakarta.persistence.ValidationMode;
+import jakarta.persistence.spi.ClassTransformer;
+import jakarta.persistence.spi.PersistenceUnitInfo;
+import jakarta.persistence.spi.PersistenceUnitTransactionType;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import ru.inno.model.db.CompanyEntity;
 import ru.inno.model.db.EmployeeEntity;
 
-import javax.persistence.SharedCacheMode;
-import javax.persistence.ValidationMode;
-import javax.persistence.spi.ClassTransformer;
-import javax.persistence.spi.PersistenceUnitInfo;
-import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
 import java.net.URL;
 import java.util.List;
@@ -107,7 +107,7 @@ public class MyPersistenceUnitInfo implements PersistenceUnitInfo {
     }
 
     @Override
-    public void addTransformer(ClassTransformer classTransformer) {
+    public void addTransformer(ClassTransformer transformer) {
 
     }
 

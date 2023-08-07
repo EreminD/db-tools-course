@@ -1,9 +1,9 @@
 package ru.inno.db;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import ru.inno.model.db.CompanyEntity;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
