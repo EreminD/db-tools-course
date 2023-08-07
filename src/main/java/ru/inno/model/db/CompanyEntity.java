@@ -24,10 +24,10 @@ public class CompanyEntity {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
     @Basic
-    @Column(name = "description", nullable = true, length = 300)
+    @Column(name = "description", length = 300)
     private String description;
     @Basic
-    @Column(name = "\"deletedAt\"", nullable = true)
+    @Column(name = "\"deletedAt\"")
     private Timestamp deletedAt;
 
 
@@ -101,7 +101,7 @@ public class CompanyEntity {
 
     @Override
     public String toString() {
-        return "HCompanyEntity{" +
+        return "CompanyEntity{" +
                 "id=" + id +
                 ", isActive=" + isActive +
                 ", createDateTime=" + createDateTime +

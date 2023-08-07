@@ -2,6 +2,7 @@ package ru.inno.ext;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import ru.inno.model.db.CompanyEntity;
+import ru.inno.model.db.EmployeeEntity;
 
 import javax.persistence.SharedCacheMode;
 import javax.persistence.ValidationMode;
@@ -24,7 +25,8 @@ public class MyPersistenceUnitInfo implements PersistenceUnitInfo {
     @Override
     public List<String> getManagedClassNames() {
         return List.of(
-                CompanyEntity.class.getName()
+                CompanyEntity.class.getName(),
+                EmployeeEntity.class.getName()
                 // Author.class.getName(),
                 // Book.class.getName(),
                 // Chapter.class.getName(),
@@ -77,7 +79,6 @@ public class MyPersistenceUnitInfo implements PersistenceUnitInfo {
     public URL getPersistenceUnitRootUrl() {
         return null;
     }
-
 
 
     @Override
