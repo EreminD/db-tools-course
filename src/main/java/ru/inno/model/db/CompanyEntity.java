@@ -1,7 +1,10 @@
 package ru.inno.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -29,6 +32,10 @@ public class CompanyEntity {
     @Basic
     @Column(name = "\"deletedAt\"")
     private Timestamp deletedAt;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "company")
+    private List<EmployeeEntity> employees;
 
 
     public int getId() {
@@ -87,16 +94,24 @@ public class CompanyEntity {
         this.deletedAt = deletedAt;
     }
 
+    public List<EmployeeEntity> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<EmployeeEntity> employees) {
+        this.employees = employees;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CompanyEntity entity)) return false;
-        return getId() == entity.getId() && isActive() == entity.isActive() && Objects.equals(getCreateDateTime(), entity.getCreateDateTime()) && Objects.equals(getLastChangedDateTime(), entity.getLastChangedDateTime()) && Objects.equals(getName(), entity.getName()) && Objects.equals(getDescription(), entity.getDescription()) && Objects.equals(getDeletedAt(), entity.getDeletedAt());
+        if (!(o instanceof CompanyEntity company)) return false;
+        return getId() == company.getId() && isActive() == company.isActive() && Objects.equals(getCreateDateTime(), company.getCreateDateTime()) && Objects.equals(getLastChangedDateTime(), company.getLastChangedDateTime()) && Objects.equals(getName(), company.getName()) && Objects.equals(getDescription(), company.getDescription()) && Objects.equals(getDeletedAt(), company.getDeletedAt()) && Objects.equals(getEmployees(), company.getEmployees());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, isActive, createDateTime, lastChangedDateTime, name, description, deletedAt);
+        return Objects.hash(getId(), isActive(), getCreateDateTime(), getLastChangedDateTime(), getName(), getDescription(), getDeletedAt(), getEmployees());
     }
 
     @Override
@@ -109,6 +124,7 @@ public class CompanyEntity {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", deletedAt=" + deletedAt +
+                ", employees.size=" + employees.size() +
                 '}';
     }
 }

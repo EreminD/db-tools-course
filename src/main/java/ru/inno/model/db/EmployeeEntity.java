@@ -1,6 +1,7 @@
 package ru.inno.model.db;
 
 import jakarta.persistence.*;
+
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -13,7 +14,6 @@ public class EmployeeEntity {
     private int id;
     @Column(name = "\"isActive\"", nullable = false)
     private boolean isActive;
-
     @Column(name = "\"createDateTime\"", nullable = false)
     private Timestamp createDateTime;
     @Column(name = "\"lastChangedDateTime\"", nullable = false)
@@ -37,9 +37,9 @@ public class EmployeeEntity {
     @Column(name = "avatar_url", length = 1024)
     private String avatarUrl;
 
-    @Basic
-    @Column(name = "\"companyId\"", nullable = false)
-    private int companyId;
+    @ManyToOne
+    @JoinColumn(name = "\"companyId\"")
+    private CompanyEntity company;
 
     public int getId() {
         return id;
@@ -121,24 +121,24 @@ public class EmployeeEntity {
         this.avatarUrl = avatarUrl;
     }
 
-    public int getCompanyId() {
-        return companyId;
+    public CompanyEntity getCompany() {
+        return company;
     }
 
-    public void setCompanyId(int companyId) {
-        this.companyId = companyId;
+    public void setCompany(CompanyEntity company) {
+        this.company = company;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof EmployeeEntity that)) return false;
-        return getId() == that.getId() && isActive() == that.isActive() && getCompanyId() == that.getCompanyId() && Objects.equals(getCreateDateTime(), that.getCreateDateTime()) && Objects.equals(getLastChangedDateTime(), that.getLastChangedDateTime()) && Objects.equals(getFirstName(), that.getFirstName()) && Objects.equals(getLastName(), that.getLastName()) && Objects.equals(getMiddleName(), that.getMiddleName()) && Objects.equals(getPhone(), that.getPhone()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getAvatarUrl(), that.getAvatarUrl());
+        return getId() == that.getId() && isActive() == that.isActive() && Objects.equals(getCreateDateTime(), that.getCreateDateTime()) && Objects.equals(getLastChangedDateTime(), that.getLastChangedDateTime()) && Objects.equals(getFirstName(), that.getFirstName()) && Objects.equals(getLastName(), that.getLastName()) && Objects.equals(getMiddleName(), that.getMiddleName()) && Objects.equals(getPhone(), that.getPhone()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getAvatarUrl(), that.getAvatarUrl()) && Objects.equals(getCompany(), that.getCompany());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), isActive(), getCreateDateTime(), getLastChangedDateTime(), getFirstName(), getLastName(), getMiddleName(), getPhone(), getEmail(), getAvatarUrl(), getCompanyId());
+        return Objects.hash(getId(), isActive(), getCreateDateTime(), getLastChangedDateTime(), getFirstName(), getLastName(), getMiddleName(), getPhone(), getEmail(), getAvatarUrl(), getCompany());
     }
 
     @Override
@@ -154,7 +154,7 @@ public class EmployeeEntity {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
-                ", companyId=" + companyId +
+                ", company=" + company +
                 '}';
     }
 }
