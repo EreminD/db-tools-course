@@ -15,11 +15,10 @@
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.mongodb/mongodb-driver -->
         <dependency>
             <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver</artifactId>
-            <version>3.12.14</version>
+            <artifactId>mongodb-driver-sync</artifactId>
+            <version>4.10.2</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

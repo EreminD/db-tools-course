@@ -5,6 +5,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Projections;
+import com.mongodb.client.result.InsertOneResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.junit.jupiter.api.AfterEach;
@@ -48,6 +49,7 @@ public class MongoTest {
     @Test
     public void insert(){
         Document document = new Document().append("name", "Валери").append("age", 1).append("breed", "Сиамская");
-        collection.insertOne(document);
+        InsertOneResult insertOneResult = collection.insertOne(document);
+        System.out.println(insertOneResult.getInsertedId());
     }
 }
