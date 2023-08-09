@@ -3,6 +3,7 @@ package ru.inno.ext;
 import org.junit.jupiter.api.extension.*;
 import ru.inno.db.CompanyRepository;
 import ru.inno.db.CompanyRepositoryJdbc;
+import ru.inno.ext.props.PropertyProvider;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,10 +32,9 @@ public class CompanyRepositoryJdbcResolver implements ParameterResolver, BeforeA
     @Override
     public void beforeAll(ExtensionContext extensionContext) throws Exception {
         System.out.println("connecting");
-        // TODO: define in .properties
-        String connectionString = "jdbc:postgresql://dpg-chdkl0ak728nnn00sqv0-a.frankfurt-postgres.render.com/x_clients_db_yjdt";
-        String user = "x_clients_user";
-        String pass = "2hdwfMCel2i7SyZeOghoUVVOOwnpyfEL";
+        String connectionString = PropertyProvider.getInstance().getProps().getProperty("hibernate.connection.url");
+        String user = PropertyProvider.getInstance().getProps().getProperty("hibernate.connection.username");
+        String pass = PropertyProvider.getInstance().getProps().getProperty("hibernate.connection.password");
         connection = DriverManager.getConnection(connectionString, user, pass);
     }
 }
