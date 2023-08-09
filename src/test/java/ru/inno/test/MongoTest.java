@@ -42,7 +42,7 @@ public class MongoTest {
         for (Document document : documents) {
             System.out.println(document.get("color"));
             Integer age = document.get("age", Integer.class);
-            System.out.println(age+1);
+            System.out.println(age);
         }
     }
 
