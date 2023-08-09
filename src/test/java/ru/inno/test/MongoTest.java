@@ -6,12 +6,15 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.result.InsertOneResult;
+import org.aeonbits.owner.ConfigCache;
+import org.aeonbits.owner.ConfigFactory;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import ru.inno.ext.props.MongoConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,8 @@ public class MongoTest {
 
     @BeforeEach
     public void setUp() {
+        MongoConfig config = ConfigCache.getOrCreate(MongoConfig.class);
+
         client = MongoClients.create(CONNECTION_STRING);
         collection = client.getDatabase(DB_NAME).getCollection(COLLECTION_NAME);
     }

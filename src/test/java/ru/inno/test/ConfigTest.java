@@ -1,12 +1,12 @@
 package ru.inno.test;
 
+import org.aeonbits.owner.ConfigCache;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import ru.inno.ext.props.AppConfig;
 import ru.inno.ext.props.PropertyProvider;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigTest {
@@ -23,7 +23,6 @@ public class ConfigTest {
     }
 
     @Test
-    @Tag("runMe")
     public void propertiesFile() {
         Properties properties = PropertyProvider.getInstance().getProps();
 
@@ -36,5 +35,17 @@ public class ConfigTest {
         System.out.println(mongoDbName);
         System.out.println(mongoCollection);
         System.out.println(nullValueKey);
+    }
+
+    @Test
+    @Tag("runMe")
+    public void ownerProps(){
+        AppConfig config = ConfigCache.getOrCreate(AppConfig.class);
+
+        System.out.println(config.year());
+        System.out.println(config.name());
+        System.out.println(config.ok());
+        System.out.println(config.numbers()[2]);
+        System.out.println(config.testUrl());
     }
 }

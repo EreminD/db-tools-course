@@ -21,6 +21,10 @@ public class PropertyProvider {
         return instance;
     }
 
+    public Properties getProps() {
+        return properties;
+    }
+
     private void loadProperties() {
         properties = new Properties();
         try {
@@ -30,10 +34,4 @@ public class PropertyProvider {
             throw new RuntimeException(ex);
         }
     }
-
-    public Properties getProps() {
-        return properties;
-    }
-
-    ;
 }
